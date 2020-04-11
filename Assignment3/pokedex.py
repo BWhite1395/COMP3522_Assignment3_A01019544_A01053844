@@ -1,3 +1,5 @@
+from facade import PokeDexSearcher
+from request import Request
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("mode", choices=["pokemon","ability","move"]
@@ -11,27 +13,35 @@ parser.add_argument("--expanded", action="store_true",
                     help="Optional mode to expand output")
 parser.add_argument("--output", help="Optional file.txt to write output")
 
-args = parser.parse_args()
-if args.mode != "pokemon" and args.mode != "move" and args.mode != "ability":
-    raise TypeError
-
+Pargs = parser.parse_args()
+if not Pargs.inputfile and not Pargs.inputdata:
+    print("Must use --inputdata or --inputfile")
+    exit()
 
 class Pokedex:
-    pass
+
+    def create_request(self, args):
+        r = Request(args)
+        return r
 
 
 def main():
-    print("The mode: " + str(args.mode))
-    if args.inputfile:
-        print("Inputfile name: " + str(args.inputfile))
-    if args.inputdata:
-        print("Inputdata: " + str(args.inputdata))
-    print(args.expanded)
-    if args.output:
-        print(args.output)
+    print("The mode: " + str(Pargs.mode))
+    if Pargs.inputfile:
+        print("Inputfile name: " + str(Pargs.inputfile))
+    if Pargs.inputdata:
+        print("Inputdata: " + str(Pargs.inputdata))
+    print(Pargs.expanded)
+    if Pargs.output:
+        print(Pargs.output)
     else:
         print("No output")
 
+    dex = Pokedex()
+    request = dex.create_request(Pargs)
+    myPokedex = PokeDexSearcher()
+    myPokedex.execute_request(request)
 
 if __name__ == '__main__':
     main()
+
