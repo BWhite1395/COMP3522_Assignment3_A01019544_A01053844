@@ -1,6 +1,9 @@
 from facade import PokeDexSearcher
 from request import Request
 import argparse
+import asyncio
+import time
+
 parser = argparse.ArgumentParser()
 parser.add_argument("mode", choices=["pokemon","ability","move"]
                     , help="The mode of the program[Pokemon/Ability/Move]")
@@ -37,11 +40,21 @@ def main():
     else:
         print("No output")
 
+    loop = asyncio.get_event_loop()
     dex = Pokedex()
     request = dex.create_request(Pargs)
     myPokedex = PokeDexSearcher()
-    myPokedex.execute_request(request)
+    response = loop.run_until_complete(myPokedex.process_single_request(Pargs))
+    print(response)
 
 if __name__ == '__main__':
     main()
 
+# async def main():
+#     # gather starts a number of async tasks in parallel waits until they
+#     # are all finished and collects their results.
+#     result = await asyncio.gather(get_data_from_database(),
+#                                   get_data_from_database(),
+#                                   get_data_from_database())
+#     # when asyncio.gather is finished, continue code from here
+#     print(f"The result: {result}")
