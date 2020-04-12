@@ -43,18 +43,12 @@ def main():
     loop = asyncio.get_event_loop()
     dex = Pokedex()
     request = dex.create_request(Pargs)
-    myPokedex = PokeDexSearcher()
-    response = loop.run_until_complete(myPokedex.process_single_request(Pargs))
-    print(response)
+    my_pokedex = PokeDexSearcher(request)
+    if Pargs.inputdata:
+        response = loop.run_until_complete(my_pokedex.process_single_request(Pargs))
+    else:
+        response = loop.run_until_complete(my_pokedex.process_requests(Pargs))
+    print("End: " + str(response))
 
 if __name__ == '__main__':
     main()
-
-# async def main():
-#     # gather starts a number of async tasks in parallel waits until they
-#     # are all finished and collects their results.
-#     result = await asyncio.gather(get_data_from_database(),
-#                                   get_data_from_database(),
-#                                   get_data_from_database())
-#     # when asyncio.gather is finished, continue code from here
-#     print(f"The result: {result}")

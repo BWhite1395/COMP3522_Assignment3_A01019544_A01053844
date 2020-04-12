@@ -1,5 +1,5 @@
 from request import Request
-from pokeretriever.pokemon import PokedexObject
+from pokeretriever.pokemon import *
 import http.client
 import json
 import requests
@@ -8,24 +8,31 @@ import aiohttp
 
 
 class PokeDexSearcher:
-    def __init__(self):
-        pass
+    def __init__(self, request):
+        self.request = request
 
     async def execute_request(self, url, session: aiohttp.ClientSession) -> PokedexObject:
         response = await session.request("GET", url)
-        print("Response object from aiohttp:\n", response)
         data = await response.json()
-        # print(data)
-        p = None #PokedexObject()
-        return p
+        print(data.get("name"))
+        if self.request.mode == "pokemon":
+            if self.request.expanded:
+                #p = PokemonStat(data.get("name"))
+                pass
+            else:
+                pass
+                #p = Pokemon()
+        elif self.request.mode == "ability":
+            pass
+            #p = PokemonAbility()
+        else:
+            pass
+            #p = PokemonMove()
+        return data# p
 
 
     async def process_single_request(self, pargs):
         """
-        This function depicts the use of await to showcase how one async
-        coroutine can await another async coroutine
-        :param id_: an int
-        :return: dict, json response
         """
         request = Request(pargs)
         url = "http://pokeapi.co/api/v2/"
@@ -40,10 +47,6 @@ class PokeDexSearcher:
 
     async def process_requests(self, pargs):
         """
-        This function depicts the use of asyncio.gather to run multiple
-        async coroutines concurrently.
-        :param requests: a list of int's
-        :return: list of dict, collection of response data from the endpoint.
         """
         r = Request(pargs)
         url = "http://pokeapi.co/api/v2/"
