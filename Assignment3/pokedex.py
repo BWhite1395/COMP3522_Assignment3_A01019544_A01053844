@@ -2,7 +2,6 @@ from facade import PokeDexSearcher
 from request import Request
 import argparse
 import asyncio
-import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("mode", choices=["pokemon","ability","move"]
@@ -21,9 +20,14 @@ if not Pargs.inputfile and not Pargs.inputdata:
     print("Must use --inputdata or --inputfile")
     exit()
 
-class Pokedex:
 
+class Pokedex:
     def create_request(self, args):
+        """
+        Creates a request object from the given input
+        :param args: The command input
+        :return:
+        """
         r = Request(args)
         return r
 
@@ -49,6 +53,7 @@ def main():
     else:
         response = loop.run_until_complete(my_pokedex.process_requests(request))
     print("End: " + str(response))
+
 
 if __name__ == '__main__':
     main()
