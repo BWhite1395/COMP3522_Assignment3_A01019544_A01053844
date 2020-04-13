@@ -31,10 +31,12 @@ class PokeDexSearcher:
         return data# p
 
 
-    async def process_single_request(self, pargs):
+    async def process_single_request(self, request):
         """
+        Processes a single request
+        :param pargs:
+        :return:
         """
-        request = Request(pargs)
         url = "http://pokeapi.co/api/v2/"
         if request.inputdata:
             url += str(request.mode + "/")
@@ -45,13 +47,15 @@ class PokeDexSearcher:
             print(response)
             return response
 
-    async def process_requests(self, pargs):
+    async def process_requests(self, request):
         """
+
+        :param request:
+        :return:
         """
-        r = Request(pargs)
         url = "http://pokeapi.co/api/v2/"
-        url += str(r.mode + "/")
-        url_list = [(url + x) for x in r.inputdata_list]
+        url += str(request.mode + "/")
+        url_list = [(url + name) for name in request.inputdata_list]
         async with aiohttp.ClientSession() as session:
             print("***process_requests")
             async_coroutines = [self.execute_request(url, session)

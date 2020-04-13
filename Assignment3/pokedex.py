@@ -45,9 +45,9 @@ def main():
     request = dex.create_request(Pargs)
     my_pokedex = PokeDexSearcher(request)
     if Pargs.inputdata:
-        response = loop.run_until_complete(my_pokedex.process_single_request(Pargs))
+        response = loop.run_until_complete(my_pokedex.process_single_request(request))
     else:
-        response = loop.run_until_complete(my_pokedex.process_requests(Pargs))
+        response = loop.run_until_complete(my_pokedex.process_requests(request))
     print("End: " + str(response))
 
 if __name__ == '__main__':
